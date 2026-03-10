@@ -70,9 +70,8 @@ public class ClientGameEvent {
 
 
             poseStack.mulPose(cameraRot);
-            poseStack.mulPose(Axis.YP.rotationDegrees(180)); // scaleで文字が反転するので、これで予め裏返しておかないと見えなくなる
 
-            poseStack.scale(-0.05f, -0.05f, 0.05f);
+            poseStack.scale(0.05f, -0.05f, 0.05f);
 
             String text = String.valueOf((int) popUp.damage);
 
