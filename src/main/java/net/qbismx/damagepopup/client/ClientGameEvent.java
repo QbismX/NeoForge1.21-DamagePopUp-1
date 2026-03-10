@@ -1,6 +1,5 @@
 package net.qbismx.damagepopup.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -30,24 +29,21 @@ public class ClientGameEvent {
     public static void render(RenderLivingEvent.Post<?, ?> event) {
         LivingEntity entity = event.getEntity();
 
-       List<PopUp> list = PopUpManager.get(entity.getId());
-       if (list == null) return;
-
-       Minecraft mc = Minecraft.getInstance();
+        Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) return;
         // if (!entity.hasLineOfSight(player)) return; これで軽めにしたかったが、逆に重くなるらしい。
         if (entity.distanceToSqr(player) > 400) return;
 
+       List<PopUp> list = PopUpManager.get(entity.getId());
+       if (list == null) {return;}
+
         PoseStack poseStack = event.getPoseStack();
-        MultiBufferSource buffer = mc.renderBuffers().bufferSource();
+        MultiBufferSource buffer = event.getMultiBufferSource();
 
         Iterator<PopUp> it = list.iterator();
 
         poseStack.pushPose();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
 
         Quaternionf cameraRot = mc.getEntityRenderDispatcher().cameraOrientation();
 
@@ -94,7 +90,7 @@ public class ClientGameEvent {
             );
 
         }
-        RenderSystem.enableDepthTest();
+
         poseStack.popPose();
 
         if(list.isEmpty()){
