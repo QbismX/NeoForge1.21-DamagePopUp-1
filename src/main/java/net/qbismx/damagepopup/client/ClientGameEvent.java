@@ -46,6 +46,9 @@ public class ClientGameEvent {
         poseStack.pushPose();
 
         Quaternionf cameraRot = mc.getEntityRenderDispatcher().cameraOrientation();
+        double dist = entity.distanceTo(player);
+
+        float scale = 0.05f + (float)dist * 0.005f; // 遠くにいるmobのダメージの値を大きく見せる
 
         while(it.hasNext()) {
 
@@ -60,7 +63,7 @@ public class ClientGameEvent {
 
             Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
             Vec3 dir = entity.position().subtract(cameraPos).normalize();
-            Vec3 offset = dir.scale(-1);
+            Vec3 offset = dir.scale(-1.2);
 
             poseStack.translate(
                     offset.x + popUp.randX,
@@ -71,7 +74,7 @@ public class ClientGameEvent {
 
             poseStack.mulPose(cameraRot);
 
-            poseStack.scale(0.05f, -0.05f, 0.05f);
+            poseStack.scale(scale, -scale, scale); // 初期はscale=0.05
 
             String text = String.valueOf((int) popUp.damage);
 
